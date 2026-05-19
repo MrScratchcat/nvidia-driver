@@ -292,15 +292,6 @@ nvidia-smi</code></pre>
   <p>Make sure secure boot is either disabled or the DKMS module is signed with an enrolled MOK. Pop OS / Ubuntu's <code>mokutil</code> walks through this — see <a href="https://wiki.ubuntu.com/UEFI/SecureBoot/DKMS">UEFI SecureBoot &amp; DKMS</a>.</p>
 
   <h2 id="how">How this works</h2>
-  <p>This is a <em>flat</em> APT repository, which is why the sources line ends in <code>./</code> instead of a suite + component. All files — <code>Release</code>, <code>InRelease</code>, <code>Packages.gz</code>, and the <code>.deb</code>s themselves — live as assets on a single GitHub Release (<code>apt-resolute-v1</code>). The signing key is hosted as a static asset on this GitHub Pages site so it has a stable URL across rebuilds.</p>
-  <p>The driver binaries are NVIDIA's, redistributed via Pop OS (<a href="https://apt.pop-os.org/release/dists/resolute/">apt.pop-os.org</a>). lwl repacks each <code>.deb</code> to substitute the upstream <code>1pop1</code> version tag with <code>1lwl1</code>, signs the resulting <code>Release</code> with the key shown above, and uploads. No driver content is modified.</p>
-  <p>Need to add or replace a driver version? Drop the new <code>.deb</code> into the repo's <code>pool-source/</code> directory and run <code>./update-repo.sh</code>. The helper handles repack, sanitisation, signing, and upload in one pass.</p>
-
-  <footer>
-    <p>Source: <a href="https://github.com/MrScratchcat/nvidia-driver">github.com/MrScratchcat/nvidia-driver</a></p>
-    <p>Signed by <code>nvidia-driver repo &lt;info@comexr.com&gt;</code> &middot; fingerprint <code>19EA FC08 4457 09DC 0110 D97A FE87 C31F 7473 ACB0</code></p>
-    <p>Driver source: <a href="https://apt.pop-os.org/release/dists/resolute/">apt.pop-os.org / resolute</a> &middot; binaries unchanged, only repackaged.</p>
-  </footer>
 </main>
 </body>
 </html>
