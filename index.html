@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nvidia-driver — lwl APT repository</title>
+<meta name="description" content="APT repository for the Pop OS NVIDIA 595 driver stream, rehosted by lwl. Signed, self-contained, drop-in for Ubuntu-derived distros.">
+<style>
+  :root {
+    --fg: #1c1c1f;
+    --fg-soft: #5a5a62;
+    --bg: #ffffff;
+    --bg-soft: #f5f5f7;
+    --bg-code: #f3f3f5;
+    --border: #e4e4e8;
+    --accent: #00674a;
+    --accent-soft: #e6f1ec;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    color: var(--fg);
+    background: var(--bg);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+  header.hero { margin-bottom: 48px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-family: var(--mono);
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+  }
+  .tagline {
+    color: var(--fg-soft);
+    margin: 0;
+    font-size: 17px;
+  }
+  h2 {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 56px 0 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { padding-top: 0; border-top: 0; }
+  h3 {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 28px 0 8px;
+    letter-spacing: -0.005em;
+  }
+  p { margin: 0 0 12px; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
+  a:hover { border-bottom-color: var(--accent); }
+  code {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  pre {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    line-height: 1.55;
+    margin: 12px 0;
+  }
+  pre code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+  }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .callout p { margin: 0; }
+  .callout p + p { margin-top: 8px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .pkg {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: var(--bg);
+  }
+  .pkg .name {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    color: var(--fg);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+    word-break: break-all;
+  }
+  .pkg .desc { font-size: 13px; color: var(--fg-soft); margin: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 14.5px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--fg-soft); font-weight: 500; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  td code { font-size: 12.5px; }
+  footer {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-soft);
+    font-size: 13.5px;
+  }
+  footer p { margin: 0 0 6px; }
+  .small { font-size: 13px; color: var(--fg-soft); }
+  nav.toc {
+    background: var(--bg-soft);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 0 0 36px;
+    font-size: 14px;
+  }
+  nav.toc strong { display: block; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-soft); margin-bottom: 6px; }
+  nav.toc a { display: inline-block; margin-right: 14px; line-height: 1.9; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <p class="eyebrow">lwl &middot; apt repository</p>
+    <h1>nvidia-driver</h1>
+    <p class="tagline">Signed APT repository serving the Pop OS NVIDIA <strong>595</strong> driver stream for the <code>resolute</code> codename. Drop‑in for Ubuntu‑derived distros — no LFS, no proxies, served from GitHub.</p>
+  </header>
+
+  <nav class="toc">
+    <strong>On this page</strong>
+    <a href="#install">Quick install</a>
+    <a href="#packages">Packages</a>
+    <a href="#verify">Verify signature</a>
+    <a href="#update">Update</a>
+    <a href="#remove">Remove</a>
+    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#how">How this works</a>
+  </nav>
+
+  <h2 id="install">Quick install</h2>
+  <p>Paste the block below into a terminal on Ubuntu&nbsp;22.04+ / Debian 12+ / Pop OS / any Ubuntu‑derived distro. It registers the signing key, adds the apt source, and installs the latest 595 driver.</p>
+<pre><code>sudo install -d -m 0755 /etc/apt/keyrings
+curl -fsSL https://mrscratchcat.github.io/nvidia-driver/keys/nvidia-driver.gpg \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/nvidia-driver.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/nvidia-driver.gpg] \
+https://github.com/MrScratchcat/nvidia-driver/releases/download/apt-resolute-v1 ./" \
+  | sudo tee /etc/apt/sources.list.d/nvidia-driver.list &gt;/dev/null
+
+sudo apt update
+sudo apt install -y nvidia-driver-595
+sudo reboot</code></pre>
+
+  <div class="callout">
+    <p><strong>Note —</strong> if you previously installed an older variant of this repo, remove the stale key with <code>sudo rm /etc/apt/keyrings/nvidia-driver.gpg /etc/apt/sources.list.d/nvidia-driver.list</code> before re‑running the block above. The signing key was rotated; old clients will fail signature verification until they re‑trust it.</p>
+  </div>
+
+  <h2 id="packages">Available packages</h2>
+  <p>Most users want <code>nvidia-driver-595</code>. The full set:</p>
+
+  <h3>Drivers</h3>
+  <div class="grid">
+    <div class="pkg"><span class="name">nvidia-driver-595</span><p class="desc">Closed‑source 595.71.05. Recommended for desktop GPUs.</p></div>
+    <div class="pkg"><span class="name">nvidia-driver-595-open</span><p class="desc">Open kernel modules variant. Use on Turing+ GPUs with new kernels.</p></div>
+    <div class="pkg"><span class="name">nvidia-driver-590</span><p class="desc">Transitional metapackage — pulls in the 595 stack.</p></div>
+    <div class="pkg"><span class="name">nvidia-driver-590-open</span><p class="desc">Transitional, open variant.</p></div>
+  </div>
+
+  <h3>Headless / DKMS subsets</h3>
+  <div class="grid">
+    <div class="pkg"><span class="name">nvidia-headless-595</span><p class="desc">Driver without X.org — for compute/CUDA servers.</p></div>
+    <div class="pkg"><span class="name">nvidia-headless-no-dkms-595</span><p class="desc">Headless without auto‑rebuilding kernel modules.</p></div>
+    <div class="pkg"><span class="name">nvidia-dkms-595</span><p class="desc">Just the DKMS sources. Pair with a kernel image.</p></div>
+    <div class="pkg"><span class="name">nvidia-kernel-source-595</span><p class="desc">Raw kernel module source.</p></div>
+  </div>
+
+  <h3>Userspace / firmware</h3>
+  <div class="grid">
+    <div class="pkg"><span class="name">nvidia-utils-595</span><p class="desc"><code>nvidia-smi</code> and friends.</p></div>
+    <div class="pkg"><span class="name">nvidia-compute-utils-595</span><p class="desc">CUDA persistenced + compute tools.</p></div>
+    <div class="pkg"><span class="name">nvidia-firmware-595-595.71.05</span><p class="desc">GPU firmware blob required by the 595 driver.</p></div>
+    <div class="pkg"><span class="name">libnvidia-gl-595</span><p class="desc">OpenGL / Vulkan / EGL implementation.</p></div>
+    <div class="pkg"><span class="name">libnvidia-compute-595</span><p class="desc">CUDA runtime libraries.</p></div>
+    <div class="pkg"><span class="name">xserver-xorg-video-nvidia-595</span><p class="desc">X.org driver glue.</p></div>
+  </div>
+
+  <h3>Extras</h3>
+  <div class="grid">
+    <div class="pkg"><span class="name">system76-driver-nvidia</span><p class="desc">System76's NVIDIA helper script (Pop OS upstream).</p></div>
+    <div class="pkg"><span class="name">linux-modules-7.0.4-76070004-generic</span><p class="desc">Pop OS resolute kernel image (only needed when running that kernel).</p></div>
+  </div>
+
+  <p class="small">Each driver version also ships <code>libnvidia-{cfg1,common,compute,decode,encode,extra,fbc1,gl}-595</code>; apt will pull them automatically as dependencies.</p>
+
+  <h2 id="verify">Verify the signature</h2>
+  <p>The repository metadata is signed by the lwl <code>nvidia-driver</code> key. Confirm the fingerprint before trusting it on a new host:</p>
+<pre><code>curl -fsSL https://mrscratchcat.github.io/nvidia-driver/keys/nvidia-driver.gpg \
+  | gpg --show-keys</code></pre>
+  <p>The output must show:</p>
+<pre><code>pub   rsa4096 2026-05-19 [SCEAR]
+      19EA FC08 4457 09DC 0110  D97A FE87 C31F 7473 ACB0
+uid                      nvidia-driver repo &lt;info@comexr.com&gt;</code></pre>
+  <p>To verify the live <code>InRelease</code> against the key:</p>
+<pre><code>curl -fsSL https://github.com/MrScratchcat/nvidia-driver/releases/download/apt-resolute-v1/InRelease \
+  | gpg --verify</code></pre>
+
+  <h2 id="update">Update the driver</h2>
+  <p>Once the source is registered, updates flow through normal apt:</p>
+<pre><code>sudo apt update
+sudo apt upgrade nvidia-driver-595</code></pre>
+  <p>When a new driver version lands here, apt will pick it up automatically on the next <code>apt update</code>.</p>
+
+  <h2 id="remove">Remove the repository</h2>
+<pre><code>sudo apt purge -y 'nvidia-*' 'libnvidia-*' 'xserver-xorg-video-nvidia-*'
+sudo rm -f /etc/apt/sources.list.d/nvidia-driver.list
+sudo rm -f /etc/apt/keyrings/nvidia-driver.gpg
+sudo apt update</code></pre>
+  <p>Reboot afterwards; the kernel will fall back to the open‑source <code>nouveau</code> driver.</p>
+
+  <h2 id="troubleshooting">Troubleshooting</h2>
+
+  <h3><code>NO_PUBKEY</code> or <code>BADSIG</code> after <code>apt update</code></h3>
+  <p>The signing key was rotated and your installed key is stale. Re‑run the install block at the top of the page — it will overwrite the old key in <code>/etc/apt/keyrings/</code>.</p>
+
+  <h3><code>404 Not Found</code> when apt fetches a <code>.deb</code></h3>
+  <p>Your local <code>Packages</code> cache is older than the published metadata (e.g. after a rebrand). Force a refresh:</p>
+<pre><code>sudo rm -rf /var/lib/apt/lists/*
+sudo apt update</code></pre>
+
+  <h3>DKMS build fails on a kernel without headers</h3>
+  <p>Install headers for the running kernel first:</p>
+<pre><code>sudo apt install -y "linux-headers-$(uname -r)"
+sudo dpkg-reconfigure nvidia-dkms-595</code></pre>
+
+  <h3><code>nvidia-smi</code> shows nothing after install</h3>
+  <p>Make sure secure boot is either disabled or the DKMS module is signed with an enrolled MOK. Pop OS / Ubuntu's <code>mokutil</code> walks through this — see <a href="https://wiki.ubuntu.com/UEFI/SecureBoot/DKMS">UEFI SecureBoot &amp; DKMS</a>.</p>
+
+  <h2 id="how">How this works</h2>
+  <p>This is a <em>flat</em> APT repository, which is why the sources line ends in <code>./</code> instead of a suite + component. All files — <code>Release</code>, <code>InRelease</code>, <code>Packages.gz</code>, and the <code>.deb</code>s themselves — live as assets on a single GitHub Release (<code>apt-resolute-v1</code>). The signing key is hosted as a static asset on this GitHub Pages site so it has a stable URL across rebuilds.</p>
+  <p>The driver binaries are NVIDIA's, redistributed via Pop OS (<a href="https://apt.pop-os.org/release/dists/resolute/">apt.pop-os.org</a>). lwl repacks each <code>.deb</code> to substitute the upstream <code>1pop1</code> version tag with <code>1lwl1</code>, signs the resulting <code>Release</code> with the key shown above, and uploads. No driver content is modified.</p>
+  <p>Need to add or replace a driver version? Drop the new <code>.deb</code> into the repo's <code>pool-source/</code> directory and run <code>./update-repo.sh</code>. The helper handles repack, sanitisation, signing, and upload in one pass.</p>
+
+  <footer>
+    <p>Source: <a href="https://github.com/MrScratchcat/nvidia-driver">github.com/MrScratchcat/nvidia-driver</a></p>
+    <p>Signed by <code>nvidia-driver repo &lt;info@comexr.com&gt;</code> &middot; fingerprint <code>19EA FC08 4457 09DC 0110 D97A FE87 C31F 7473 ACB0</code></p>
+    <p>Driver source: <a href="https://apt.pop-os.org/release/dists/resolute/">apt.pop-os.org / resolute</a> &middot; binaries unchanged, only repackaged.</p>
+  </footer>
+</main>
+</body>
+</html>
