@@ -173,8 +173,16 @@
   </nav>
 
   <h2 id="install">Quick install</h2>
-  <p>Paste the block below into a terminal on Ubuntu&nbsp;22.04+ / Debian 12+ / Pop OS / any Ubuntu‑derived distro. It registers the signing key, adds the apt source, and installs the latest 595 driver.</p>
-<pre><code>sudo install -d -m 0755 /etc/apt/keyrings
+  <p>One command on Ubuntu&nbsp;22.04+ / Debian 12+ / Pop OS / any Ubuntu‑derived distro:</p>
+<pre><code>curl -fsSL https://mrscratchcat.github.io/nvidia-driver/install.sh | sudo bash</code></pre>
+  <p>The script installs kernel headers + DKMS, registers the signing key, pins the lwl repo above any other nvidia source, installs <code>nvidia-driver-595</code>, builds the DKMS module against your running kernel, unbinds <code>nouveau</code>, and loads the new modules. To pick a different package up‑front:</p>
+<pre><code>curl -fsSL https://mrscratchcat.github.io/nvidia-driver/install.sh \
+  | sudo DRIVER_PKG=nvidia-driver-595-open bash</code></pre>
+
+  <h3>Manual install</h3>
+  <p>If you prefer to wire up apt by hand:</p>
+<pre><code>sudo apt install -y "linux-headers-$(uname -r)" dkms build-essential
+sudo install -d -m 0755 /etc/apt/keyrings
 curl -fsSL https://mrscratchcat.github.io/nvidia-driver/keys/nvidia-driver.gpg \
   | sudo gpg --dearmor -o /etc/apt/keyrings/nvidia-driver.gpg
 
@@ -184,10 +192,14 @@ https://github.com/MrScratchcat/nvidia-driver/releases/download/apt-resolute-v1 
 
 sudo apt update
 sudo apt install -y nvidia-driver-595
-sudo reboot</code></pre>
+sudo dkms autoinstall -k "$(uname -r)"
+sudo modprobe -r nouveau 2&gt;/dev/null || true
+sudo modprobe nvidia nvidia-drm nvidia-uvm nvidia-modeset
+nvidia-smi</code></pre>
 
   <div class="callout">
-    <p><strong>Note —</strong> if you previously installed an older variant of this repo, remove the stale key with <code>sudo rm /etc/apt/keyrings/nvidia-driver.gpg /etc/apt/sources.list.d/nvidia-driver.list</code> before re‑running the block above. The signing key was rotated; old clients will fail signature verification until they re‑trust it.</p>
+    <p><strong>Headers are mandatory.</strong> <code>nvidia-driver-595</code> ships as a DKMS module, not a prebuilt kernel module, so <code>linux-headers-$(uname -r)</code> must be installed <em>before</em> the driver. Without them the DKMS post‑install build is skipped silently and <code>nvidia-smi</code> won't find the module.</p>
+    <p>If you previously trusted an older variant of this repo, the signing key was rotated. Remove the stale key first: <code>sudo rm -f /etc/apt/keyrings/nvidia-driver.gpg /etc/apt/sources.list.d/nvidia-driver.list</code>.</p>
   </div>
 
   <h2 id="packages">Available packages</h2>
@@ -262,10 +274,19 @@ sudo apt update</code></pre>
 <pre><code>sudo rm -rf /var/lib/apt/lists/*
 sudo apt update</code></pre>
 
-  <h3>DKMS build fails on a kernel without headers</h3>
-  <p>Install headers for the running kernel first:</p>
-<pre><code>sudo apt install -y "linux-headers-$(uname -r)"
-sudo dpkg-reconfigure nvidia-dkms-595</code></pre>
+  <h3><code>nvidia-smi</code> reports "no devices" right after install</h3>
+  <p>The DKMS module either didn't build (missing headers) or built but never loaded (nouveau still bound, no reboot). Check the build state:</p>
+<pre><code>dkms status nvidia
+lsmod | grep nvidia</code></pre>
+  <p>If <code>dkms status</code> shows nothing, install headers and rebuild:</p>
+<pre><code>sudo apt install -y "linux-headers-$(uname -r)" dkms build-essential
+sudo dpkg-reconfigure nvidia-dkms-595
+sudo dkms autoinstall -k "$(uname -r)"</code></pre>
+  <p>If <code>dkms status</code> shows <code>installed</code> but <code>lsmod | grep nvidia</code> is empty, unbind nouveau and load the modules:</p>
+<pre><code>sudo modprobe -r nouveau
+sudo modprobe nvidia nvidia-drm nvidia-uvm nvidia-modeset
+nvidia-smi</code></pre>
+  <p>A reboot is the cleanest fix when in doubt — <code>install.sh</code> handles this automatically.</p>
 
   <h3><code>nvidia-smi</code> shows nothing after install</h3>
   <p>Make sure secure boot is either disabled or the DKMS module is signed with an enrolled MOK. Pop OS / Ubuntu's <code>mokutil</code> walks through this — see <a href="https://wiki.ubuntu.com/UEFI/SecureBoot/DKMS">UEFI SecureBoot &amp; DKMS</a>.</p>
